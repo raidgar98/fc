@@ -10,11 +10,13 @@
 #include <openssl/sha.h>
 #include <openssl/obj_mac.h>
 
-/** 
+#define LIBRESSL_VERSION_NUMBER 1
+
+/**
  * @file openssl.hpp
  * Provides common utility calls for wrapping openssl c api.
  */
-namespace fc 
+namespace fc
 {
   class path;
 

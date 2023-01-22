@@ -43,6 +43,10 @@ LIST(APPEND BOOST_COMPONENTS coroutine thread date_time filesystem system progra
 # boost::endian is also required, but FindBoost can't handle header-only libs
 SET( Boost_USE_STATIC_LIBS ON CACHE STRING "ON or OFF" )
 
+
+find_library(BOOST_STACKTRACE_BACKTRACE_LIBRARY NAMES boost_stacktrace_backtrace)
+add_compile_definitions(BOOST_STACKTRACE_USE_BACKTRACE)
+
 # Configure secp256k1-zkp
 if ( WIN32 )
     # autoconf won't work here, hard code the defines
@@ -340,9 +344,9 @@ target_include_directories(fc
 IF(NOT WIN32)
   set(LINK_USR_LOCAL_LIB -L/usr/local/lib)
 ENDIF()
-target_link_libraries( fc PUBLIC ${LINK_USR_LOCAL_LIB}  ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARIES} ${Boost_LIBRARIES}
+target_link_libraries( fc PUBLIC ${LINK_USR_LOCAL_LIB}  ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARIES} dl ${Boost_LIBRARIES}
                                  ${PLATFORM_SPECIFIC_LIBS} ${RPCRT4} ${CMAKE_DL_LIBS} ${rt_library}
-                                 ${editline_libraries} secp256k1 ${CMAKE_REQUIRED_LIBRARIES} )
+                                 ${editline_libraries} secp256k1 ${CMAKE_REQUIRED_LIBRARIES} backtrace)
 
 if(WIN32 AND MSVC)
     set_source_files_properties( src/network/http/websocket.cpp PROPERTIES COMPILE_FLAGS "/bigobj" )
